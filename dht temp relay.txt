@@ -1,0 +1,56 @@
+#include <dht.h>        // Include library
+#define outPin 2        // Defines pin number to which the sensor is connected
+#define relay 3
+dht DHT;                // Creates a DHT object
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
+int settemp = 35;   //set temperature
+
+void setup() {
+  lcd.init();                      // initialize the lcd 
+  lcd.init();
+  // Print a message to the LCD.
+  lcd.backlight();
+  Serial.begin(9600);
+  pinMode(relay,OUTPUT);
+  digitalWrite(relay,HIGH);
+}
+
+void loop() {
+  int readData = DHT.read11(outPin);
+
+  int t = DHT.temperature;        // Read temperature
+  int h = DHT.humidity;           // Read humidity
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Temperature = ");
+  int far = (t*9.0)/5.0+32;        // Convert celsius to fahrenheit
+  lcd.print(t);
+  lcd.print("\337C ");
+  lcd.setCursor(0,1);
+  lcd.print("Humidity = ");
+  lcd.print(h);
+  lcd.print(" % ");
+
+
+  if(t>=settemp)
+  {
+    digitalWrite(relay,LOW);
+          lcd.setCursor(0,2);
+  lcd.print("Temperature : HIGH");
+  lcd.setCursor(0,3);
+  lcd.print("Fan is ON");
+  }
+  else
+  {
+        digitalWrite(relay,HIGH);
+      lcd.setCursor(0,2);
+  lcd.print("Temperature : Normal");
+  lcd.setCursor(0,3);
+  lcd.print("Fan is OFF");
+  }
+  delay(2000); // wait two seconds
+}
