@@ -27,7 +27,7 @@ void loop() {
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Temperature = ");
-  int far = (t*9.0)/5.0+32;        // Convert celsius to fahrenheit
+  int far = (t*9.0)/5.0+32;        // Convert celsius to fahrenheit - this may NOT be necessary - depends on your objective
   lcd.print(t);
   lcd.print("\337C ");
   lcd.setCursor(0,1);
